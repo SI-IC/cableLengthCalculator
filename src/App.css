@@ -122,6 +122,9 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+iframe {
+  display: none;
+}
 
 .App {
   display: flex;
@@ -166,6 +169,12 @@ table {
   position: absolute;
   width: 70px;
   bottom: 10px;
+}
+
+.downloadButton {
+  position: absolute;
+  width: 70px;
+  bottom: 210px;
 }
 
 .show-parameters-button {

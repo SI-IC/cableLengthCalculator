@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { getDocument, GlobalWorkerOptions, version } from 'pdfjs-dist';
+import * as htmlToImage from 'html-to-image';
+import 'svg2pdf.js';
 import './App.css';
 import { BulbIcon } from './Icons/BulbIcon';
 import { SensorIcon } from './Icons/SensorIcon';
@@ -390,10 +392,12 @@ const App: React.FC = () => {
   const calculateLineLengths = () => {
     const lines = document.querySelectorAll('.lines-container g.line polyline');
     let totalLength = 0;
+    const groupLengths: { [key: string]: number } = {};
 
     lines.forEach((line) => {
+      const group = line.getAttribute('data-group');
       const points = line.getAttribute('points');
-      if (points) {
+      if (points && group) {
         const pointList = points
           .trim()
           .split(' ')
@@ -406,6 +410,11 @@ const App: React.FC = () => {
           if (!isNaN(x1) && !isNaN(y1) && !isNaN(x2) && !isNaN(y2)) {
             const length = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
             totalLength += length;
+
+            if (!groupLengths[group]) {
+              groupLengths[group] = 0;
+            }
+            groupLengths[group] += length;
           }
         }
       }
@@ -414,11 +423,45 @@ const App: React.FC = () => {
       ? totalLength / scaleLine.scale
       : totalLength;
 
-    alert(
-      `Total length of all lines: ${totalLengthInCm.toFixed(2)}${
-        scaleLine.scale ? ' m' : ' px'
-      }`
-    );
+    let alertString = '';
+
+    Object.entries(groupLengths).map(([key, value]) => {
+      alertString =
+        alertString +
+        `Group ${key}: ${
+          scaleLine.scale
+            ? `${(value / scaleLine.scale).toFixed(2)} m \n`
+            : `${value.toFixed(2)} px \n`
+        }`;
+    });
+
+    alert(alertString);
+
+    // alert(
+    //   `Total length of all lines: ${totalLengthInCm.toFixed(2)}${
+    //     scaleLine.scale ? ' m' : ' px'
+    //   }`
+    // );
+  };
+
+  const downloadImage = async () => {
+    const browserFrame = document.getElementById('browser-frame');
+
+    if (!browserFrame) {
+      alert('Error: Unable to find the browser frame element.');
+      return;
+    }
+
+    try {
+      const imageDataUrl = await htmlToImage.toPng(browserFrame);
+      const link = document.createElement('a');
+      link.href = imageDataUrl;
+      link.download = 'schema.png';
+      link.click();
+    } catch (error) {
+      console.error('Error generating image:', error);
+      alert('Error: Unable to generate the image.');
+    }
   };
 
   const handleLineContextMenu = (e: React.MouseEvent, lineIndex: number) => {
@@ -559,9 +602,13 @@ const App: React.FC = () => {
         >
           {`${isScaleMode ? 'Cancel' : 'Set'} scale`}
         </button>
+        <button onClick={downloadImage} className='downloadButton'>
+          Download Schema
+        </button>
       </div>
       <div
         className='browser-frame'
+        id='browser-frame'
         ref={browserFrameRef}
         onDragOver={handleDragOver}
         onDrop={handleDrop}
@@ -611,6 +658,22 @@ const App: React.FC = () => {
             const fromElement = document.getElementById(from);
             const toElement = document.getElementById(to);
 
+            let groupFrom;
+            let groupTo;
+            let lineGroup;
+            Object.keys(iconParameters).forEach((el) => {
+              if (el === from) {
+                groupFrom = iconParameters[el].group;
+              }
+              if (el === to) {
+                groupTo = iconParameters[el].group;
+              }
+            });
+
+            if (groupFrom && groupFrom === groupTo) {
+              lineGroup = groupFrom;
+            }
+
             if (!fromElement || !toElement) return null;
 
             const svgRect = (
@@ -635,6 +698,7 @@ const App: React.FC = () => {
                   fill='none'
                   stroke='black'
                   strokeWidth='2'
+                  data-group={lineGroup}
                   pointerEvents='visibleStroke'
                   onContextMenu={(e) => handleLineContextMenu(e, lineIndex)}
                 />

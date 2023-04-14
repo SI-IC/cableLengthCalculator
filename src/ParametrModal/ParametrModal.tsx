@@ -33,13 +33,22 @@ const ParameterModal: React.FC<ParameterModalProps> = ({
 
   const renderBulbParameters = () => {
     return (
-      <>
+      <div className='parameters-wrapper'>
         <label>
-          Название:
+          Номер:
           <input
             type='text'
             name='name'
             value={formValues.name || ''}
+            onChange={handleInputChange}
+          />
+        </label>
+        <label>
+          Группа:
+          <input
+            type='text'
+            name='group'
+            value={formValues.group || ''}
             onChange={handleInputChange}
           />
         </label>
@@ -68,6 +77,7 @@ const ParameterModal: React.FC<ParameterModalProps> = ({
             value={formValues.interface || ''}
             onChange={handleInputChange}
           >
+            <option>---</option>
             <option>PWM</option>
             <option>TW</option>
             <option>RGB</option>
@@ -78,7 +88,7 @@ const ParameterModal: React.FC<ParameterModalProps> = ({
           </select>
         </label>
         <label>
-          опусĸ ĸабеля, м:
+          Опусĸ ĸабеля, м:
           <input
             type='text'
             name='cable'
@@ -86,20 +96,28 @@ const ParameterModal: React.FC<ParameterModalProps> = ({
             onChange={handleInputChange}
           />
         </label>
-      </>
+      </div>
     );
   };
 
   const renderSensorParameters = () => {
     return (
-      <>
-        {' '}
+      <div className='parameters-wrapper'>
         <label>
-          Название:
+          Номер:
           <input
             type='text'
             name='name'
             value={formValues.name || ''}
+            onChange={handleInputChange}
+          />
+        </label>
+        <label>
+          Группа:
+          <input
+            type='text'
+            name='group'
+            value={formValues.group || ''}
             onChange={handleInputChange}
           />
         </label>
@@ -110,6 +128,7 @@ const ParameterModal: React.FC<ParameterModalProps> = ({
             value={formValues.type || ''}
             onChange={handleInputChange}
           >
+            <option>---</option>
             <option>движение</option>
             <option>температура</option>
             <option>освещенность</option>
@@ -133,6 +152,7 @@ const ParameterModal: React.FC<ParameterModalProps> = ({
             value={formValues.interface || ''}
             onChange={handleInputChange}
           >
+            <option>---</option>
             <option>DI</option>
             <option>RS485</option>
             <option>AI</option>
@@ -140,7 +160,7 @@ const ParameterModal: React.FC<ParameterModalProps> = ({
           </select>
         </label>
         <label>
-          опусĸ ĸабеля, м:
+          Опусĸ ĸабеля, м:
           <input
             type='text'
             name='cable'
@@ -148,20 +168,28 @@ const ParameterModal: React.FC<ParameterModalProps> = ({
             onChange={handleInputChange}
           />
         </label>
-      </>
+      </div>
     );
   };
 
   const renderSwitchParameters = () => {
     return (
-      <>
-        {' '}
+      <div className='parameters-wrapper'>
         <label>
-          Название:
+          Номер:
           <input
             type='text'
             name='name'
             value={formValues.name || ''}
+            onChange={handleInputChange}
+          />
+        </label>
+        <label>
+          Группа:
+          <input
+            type='text'
+            name='group'
+            value={formValues.group || ''}
             onChange={handleInputChange}
           />
         </label>
@@ -172,12 +200,13 @@ const ParameterModal: React.FC<ParameterModalProps> = ({
             value={formValues.interface || ''}
             onChange={handleInputChange}
           >
+            <option>---</option>
             <option>DI</option>
             <option>1-wire</option>
           </select>
         </label>
         <label>
-          опусĸ ĸабеля, м:
+          Опусĸ ĸабеля, м:
           <input
             type='text'
             name='cable'
@@ -185,16 +214,15 @@ const ParameterModal: React.FC<ParameterModalProps> = ({
             onChange={handleInputChange}
           />
         </label>
-      </>
+      </div>
     );
   };
 
   const renderMainPanelParameters = () => {
     return (
-      <>
-        {' '}
+      <div className='parameters-wrapper'>
         <label>
-          Название:
+          Номер:
           <input
             type='text'
             name='name'
@@ -203,7 +231,16 @@ const ParameterModal: React.FC<ParameterModalProps> = ({
           />
         </label>
         <label>
-          опусĸ ĸабеля, м:
+          Группа:
+          <input
+            type='text'
+            name='group'
+            value={formValues.group || ''}
+            onChange={handleInputChange}
+          />
+        </label>
+        <label>
+          Опусĸ ĸабеля, м:
           <input
             type='text'
             name='cable'
@@ -211,7 +248,7 @@ const ParameterModal: React.FC<ParameterModalProps> = ({
             onChange={handleInputChange}
           />
         </label>
-      </>
+      </div>
     );
   };
 
@@ -227,7 +264,7 @@ const ParameterModal: React.FC<ParameterModalProps> = ({
           setFormValues({});
         }}
       >
-        Close
+        Сохранить
       </button>
     </div>
   );

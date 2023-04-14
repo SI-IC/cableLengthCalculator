@@ -22,7 +22,7 @@ const ScaleModal: React.FC<ScaleModalProps> = ({ isOpen, onClose }) => {
     <div className='scale-modal'>
       <div className='scale-modal-content'>
         <h3>Set the scale</h3>
-        <form onSubmit={handleSubmit}>
+        <div onSubmit={handleSubmit}>
           <label htmlFor='distance-in-cm'>Distance in m:</label>
           <input
             autoFocus
@@ -33,7 +33,7 @@ const ScaleModal: React.FC<ScaleModalProps> = ({ isOpen, onClose }) => {
           <button type='submit' onClick={() => onClose(Number(distanceInM))}>
             Set scale
           </button>
-        </form>
+        </div>
       </div>
     </div>
   );
